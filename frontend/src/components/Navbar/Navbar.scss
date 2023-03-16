@@ -7,30 +7,26 @@
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid #000;
   position: fixed;
   z-index: 2;
 }
 .app__navbar-logo {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  img {
-    width: 90px;
-    height: 30px;
-    object-fit: contain;
+  text-align: center;
+  p {
+    font-size: 2rem;
     @media screen and (min-width: 2000px) {
-      width: 180px;
-      height: 40px;
+      font-size: 3rem;
+    }
+    @media screen and (max-width: 900px) {
+      font-size: 1.3rem;
     }
   }
 }
 .app__navbar-links {
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-
   list-style: none;
 
   li {
@@ -43,8 +39,9 @@
       height: 5px;
       background: transparent;
       border-radius: 50%;
-
       margin-bottom: 5px;
+      margin-left: 20px;
+      transition: all 0.3s ease-in-out;
     }
     a {
       color: var(--gray-color);
@@ -75,7 +72,6 @@
   height: 35px;
   border-radius: 50%;
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,18 +89,13 @@
     bottom: 0;
     right: 0;
     z-index: 5;
-
     padding: 1rem;
-
-    width: 80%;
+    width: 40%;
     height: 100vh;
-
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
     flex-direction: column;
-
-    background: url("../../assets/bgWhite.png");
     background-color: var(--white-color);
     background-size: cover;
     background-repeat: repeat;
