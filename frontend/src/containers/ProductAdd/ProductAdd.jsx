@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useFormik } from "formik";
-import "./ProductAdd.scss"; 
+import "./ProductAdd.scss";
 const ProductAdd = () => {
   const bookBx = useRef();
   const [selected, setSelected] = useState(null);
@@ -20,7 +20,7 @@ const ProductAdd = () => {
       }
     });
   }
-  
+
   const formik = useFormik({
     initialValues: {
       sku: "",
@@ -34,37 +34,77 @@ const ProductAdd = () => {
       height: "",
     },
     onSubmit: (values) => {
+      let given = {
+        sku: "",
+        name: "",
+        price: "",
+        productType: "",
+      };
+      for (let key in given) {
+        if (given[key] === "") {
+          // errors[key] = "This field is required";
+        }
+      }
       console.log(values);
     },
     validate: (values) => {
       let errors = {};
-      const given = values.slice(3,4)
+      let given = {
+        sku: "",
+        name: "",
+        price: "",
+        productType: "",
+      };
       for (let key in given) {
         if (given[key] === "") {
           errors[key] = "This field is required";
         }
       }
-      if (selected === "Furniture") { 
+      if (selected === "Furniture") {
         if (!values.height || !values.width || !values.length) {
-          errors.height = "This field is required";
-          errors.width = "This field is required";
-          errors.length = "This field is required";
+          errors.productType = "This furniture is required";
+        }
+        let required = {
+          length: "",
+          width: "",
+          height: "",
+        };
+        for (let key in required) {
+          if (required[key] === "") {
+            errors[key] = "This field is required";
+          }
+        }
+      }
+      if (selected === "Book") {
+        if (!values.weight) {
+          errors.productType = "This Book is required";
+        }
+        if (values.weight === "") {
+          errors.weight = "This field is required";
+        }
+      }
+      if (selected === "DVD") {
+        if (!values.size) {
+          errors.productType = "This DVD Size is required";
+        }
+        if (values.size === "") {
+          errors.size = "This field is required";
         }
       }
       return errors;
     },
   });
-  console.log(formik.errors)
+  console.log(formik.errors);
   return (
     <div className="container">
-       <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <nav className="app__navbar">
           <div className="app__navbar-logo">
             <p>Product Add</p>
           </div>
           <ul className="pro__navbar-links">
             <li className="app__flex p-text">
-            <button type='submit'>Save</button>
+              <button type="submit">Save</button>
             </li>
             <li className="app__flex p-text">
               <button>Cancel</button>
@@ -197,7 +237,7 @@ const ProductAdd = () => {
           </div>
         </div>
       </form>
-    </div> 
+    </div>
   );
 };
 
