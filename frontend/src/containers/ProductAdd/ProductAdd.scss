@@ -8,20 +8,6 @@
     margin: 0 1rem;
     cursor: pointer;
     flex-direction: column;
-
-    button {
-      color: var(--gray-color);
-      border: none;
-      outline: none;
-      padding: 10px 15px;
-      border-radius: 18px;
-      color: var(--white-color);
-      flex-direction: column;
-      text-transform: uppercase;
-      font-weight: 500;
-      transition: all 0.3s ease-in-out;
-      cursor: pointer;
-    }
     &:nth-child(2) button {
       background: var(--brown-color);
       &:hover {
@@ -40,6 +26,18 @@
     }
   }
 }
+button {
+  color: var(--gray-color);
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  border-radius: 18px;
+  color: var(--white-color);
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
 .pro__form-container {
   flex: 1;
   width: 100%;
@@ -57,7 +55,7 @@
   }
   .pro__form {
     position: relative;
-    width: 400px;
+    width: 430px;
     padding: 40px 40px 60px;
     background: var(--primary-color);
     border-radius: 10px;
@@ -74,9 +72,10 @@
         color: #868686;
         margin-right: 10px;
         font-size: 18px;
+        white-space: nowrap;
       }
       input,select {
-        height: 50px;
+        height: 40px;
         border: none;
         outline: none;
         border-radius: 40px;

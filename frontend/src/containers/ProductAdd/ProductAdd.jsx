@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useFormik } from "formik";
 import "./ProductAdd.scss";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const ProductAdd = () => {
   const bookBx = useRef();
   const [selected, setSelected] = useState(null);
   const [selectClass, setSelectClass] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     setSelectClass(() => bookBx.current);
   }, []);
@@ -34,35 +36,41 @@ const ProductAdd = () => {
       height: "",
     },
     onSubmit: (values) => {
-      let given = {
-        sku: "",
-        name: "",
-        price: "",
-        productType: "",
-      };
-      for (let key in given) {
-        if (given[key] === "") {
-          // errors[key] = "This field is required";
-        }
-      }
-      console.log(values);
+      axios
+        .post(
+          "http://localhost/php/Scandiweb/backend/createProduct.php",
+          values
+        )
+        .then((data) => {
+          if (data.data.success === true) {
+            navigate("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     validate: (values) => {
       let errors = {};
-      let given = {
-        sku: "",
-        name: "",
-        price: "",
-        productType: "",
-      };
-      for (let key in given) {
-        if (given[key] === "") {
-          errors[key] = "This field is required";
-        }
+
+      if (!values.sku) {
+        errors.sku = "Please, submit required data";
       }
+      if (!values.name) {
+        errors.name = "Please, submit required data";
+      }
+      if (!values.price) {
+        errors.price = "Please, submit required data";
+      } else if (isNaN(values.price)) {
+        errors.price = "Please provide a value of number type";
+      }
+      if (!values.productType) {
+        errors.productType = "Please, submit required data";
+      }
+
       if (selected === "Furniture") {
         if (!values.height || !values.width || !values.length) {
-          errors.productType = "This furniture is required";
+          errors.productType = "Please provide dimensions";
         }
         let required = {
           length: "",
@@ -70,31 +78,39 @@ const ProductAdd = () => {
           height: "",
         };
         for (let key in required) {
-          if (required[key] === "") {
-            errors[key] = "This field is required";
+          if (!values[key]) {
+            errors[key] = "Please, submit required data";
+          } else if (isNaN(values[key])) {
+            errors[key] = "Please provide a value of number type";
           }
         }
       }
+
       if (selected === "Book") {
         if (!values.weight) {
-          errors.productType = "This Book is required";
+          errors.productType = "Please provide weight";
         }
-        if (values.weight === "") {
-          errors.weight = "This field is required";
+        if (!values.weight) {
+          errors.weight = "Please, submit required data";
+        } else if (isNaN(values.weight)) {
+          errors.weight = "Please provide a value of number type";
         }
       }
+
       if (selected === "DVD") {
         if (!values.size) {
-          errors.productType = "This DVD Size is required";
+          errors.productType = "Please provide size";
         }
-        if (values.size === "") {
-          errors.size = "This field is required";
+        if (!values.size) {
+          errors.size = "Please, submit required data";
+        } else if (isNaN(values.size)) {
+          errors.size = "Please provide a value of number type";
         }
       }
+
       return errors;
     },
   });
-  console.log(formik.errors);
   return (
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
@@ -107,14 +123,14 @@ const ProductAdd = () => {
               <button type="submit">Save</button>
             </li>
             <li className="app__flex p-text">
-              <button>Cancel</button>
+              <button onClick={()=>navigate('/')} type="button">Cancel</button>
             </li>
           </ul>
         </nav>
 
         <div className="pro__form-container app__flex">
           <div className="pro__form">
-            {["sku", "name", "price"].map((fieldName) => (
+            {["sku", "name"].map((fieldName) => (
               <div className="pro__form-group" key={fieldName}>
                 <label htmlFor={fieldName}>{fieldName.toUpperCase()}</label>
                 <input
@@ -137,6 +153,25 @@ const ProductAdd = () => {
                 )}
               </div>
             ))}
+            <div className="pro__form-group">
+              <label htmlFor="size">Price [$]</label>
+              <input
+                name="price"
+                type="number"
+                id="price"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={
+                  formik.errors.price && formik.touched.price
+                    ? "is-invalid"
+                    : ""
+                }
+                value={formik.values.price}
+              />
+              {formik.touched.price && (
+                <span className="text-danger">{formik.errors.price}</span>
+              )}
+            </div>
             <div className="pro__form-group">
               <label htmlFor="productType">Type Switcher</label>
               <select
@@ -168,7 +203,7 @@ const ProductAdd = () => {
             <div className="bx" ref={bookBx}>
               <div className="Book" style={{ display: "none" }}>
                 <div className="pro__form-group">
-                  <label htmlFor="weight">Weight</label>
+                  <label htmlFor="weight">Weight [KG]</label>
                   <input
                     type="number"
                     id="weight"
@@ -189,7 +224,7 @@ const ProductAdd = () => {
               </div>
               <div className="DVD" style={{ display: "none" }}>
                 <div className="pro__form-group">
-                  <label htmlFor="size">Size</label>
+                  <label htmlFor="size">Size [MB]</label>
                   <input
                     name="size"
                     type="number"
@@ -211,7 +246,9 @@ const ProductAdd = () => {
               <div className="Furniture" style={{ display: "none" }}>
                 {["height", "width", "length"].map((fieldName) => (
                   <div className="pro__form-group" key={fieldName}>
-                    <label htmlFor={fieldName}>{fieldName.toUpperCase()}</label>
+                    <label htmlFor={fieldName}>
+                      {fieldName.toUpperCase()} [CM]
+                    </label>
                     <input
                       type="text"
                       name={fieldName}

@@ -57,4 +57,6 @@ abstract class ProductAbstract extends Config
     }
 
     abstract public function save();
+    abstract public function getProductData();
+    abstract public function deleteProduct();
 }

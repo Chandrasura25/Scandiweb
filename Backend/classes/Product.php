@@ -7,8 +7,7 @@ class Product extends ProductAbstract
     protected $weight;
     protected $height;
     protected $width;
-
-    public function __construct($sku, $name, $price, $productType, $size = null, $length = null, $weight = null, $height = null, $width = null)
+    public function __construct($sku, $name, $price, $productType, $size = null,  $weight = null, $height = null, $width = null,$length = null)
     {
         parent::__construct($sku, $name, $price, $productType);
 
@@ -68,21 +67,31 @@ class Product extends ProductAbstract
     {
         $this->width = $width;
     }
-    
+
     public function save()
     {
         // Prepare the query
-        $query ="INSERT INTO products (sku, name, price, productType, size, weight, height, length, width) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO Products (sku, name, price, productType, size, weight, height, width, length) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Set the parameters
-        $binder =array("ssisiiiii", $this->getSku(), $this->getName(), $this->getPrice(), $this->getProductType(), $this->getSize(), $this->getWeight(), $this->getHeight(), $this->getLength(), $this->getWidth());
+        $binder = array("ssisiiiii", $this->getSku(), $this->getName(), $this->getPrice(), $this->getProductType(), $this->getSize(), $this->getWeight(), $this->getHeight(), $this->getWidth(), $this->getLength());
 
-         return $this->create($query,$binder);
-
+        return $this->create($query, $binder);
     }
 
     public function getProductData()
     {
-        // MySQL logic for getting product data with getters
+        // Prepare the query
+        $query = "SELECT * FROM products ORDER By ProductID DESC";
+        $binder = null;
+
+        // $product = new self();
+        return $this->read($query, $binder);
     }
+    public function deleteProduct(){
+        $query = "DELETE FROM Products WHERE sku = ?";
+        $binder = array("s",$this->getSku());
+        return $this->delete($query,$binder);
+    }
+
 }

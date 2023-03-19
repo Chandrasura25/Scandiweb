@@ -40,21 +40,35 @@
       background: transparent;
       border-radius: 50%;
       margin-bottom: 5px;
-      margin-left: 20px;
+      margin-left: 10px;
       transition: all 0.3s ease-in-out;
     }
-    a {
-      color: var(--gray-color);
-      text-decoration: none;
-      flex-direction: column;
-
+    button{
+      background: red;
+      &:hover{
+        border: 1px solid red;
+        background: none;
+        color: red;
+      }
+    }
+    a{
+      background: var(--brown-color);
+      border: none;
+      outline: none;
+      width: 100px;
+      padding: 10px 15px;
+      text-align: center;
+      border-radius: 18px;
+      color: var(--white-color);
       text-transform: uppercase;
       font-weight: 500;
-
       transition: all 0.3s ease-in-out;
-
+      cursor: pointer;
+      text-decoration: none;
       &:hover {
-        color: var(--secondary-color);
+        color: var(--brown-color);
+        background: none;
+        border:1px solid var(--brown-color) ;
       }
     }
     &:hover {
