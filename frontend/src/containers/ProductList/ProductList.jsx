@@ -24,7 +24,6 @@ const ProductList = () => {
       setSelectedProductIndexes((prevState) => prevState.filter((selectedSku) => selectedSku !== sku));
     }
   };
-
   const deleteSelectedProducts = () => {
     if (selectedProductIndexes.length > 0) {
       axios
@@ -32,7 +31,6 @@ const ProductList = () => {
           sku: selectedProductIndexes,
         })
         .then((response) => {
-          console.log(response.data);
           setSelectedProductIndexes([]);
           setProducts((prevState) => prevState.filter((product) => !selectedProductIndexes.includes(product.sku)));
         })
