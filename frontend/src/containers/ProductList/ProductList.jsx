@@ -3,16 +3,17 @@ import "./ProductList.scss";
 import "./Navbar.scss";
 import { HiMenuAlt4, HiX } from "react-icons/hi";
 import axios from "axios";
-
+import {useNavigate} from 'react-router-dom'
 const ProductList = () => {
   const [toggle, setToggle] = useState(false);
   const [check, setCheck] = useState(false);
   const [selectedProductIndexes, setSelectedProductIndexes] = useState([]);
   const [products, setProducts] = useState([]);
-
+  const navigate = useNavigate()
+  const url ='https://scandiwebackend.000webhostapp.com/Backend'
   useEffect(() => {
     axios
-      .get("http://localhost/php/Scandiweb/backend/getAllProducts.php")
+      .get(`${url}/getAllProducts.php`) 
       .then((data) => setProducts(data.data.result))
       .catch((err) => console.log(err));
   }, []);
@@ -27,7 +28,7 @@ const ProductList = () => {
   const deleteSelectedProducts = () => {
     if (selectedProductIndexes.length > 0) {
       axios
-        .post("http://localhost/php/Scandiweb/backend/deleteProduct.php", {
+        .post(`${url}/deleteProduct.php`, {
           sku: selectedProductIndexes,
         })
         .then((response) => {
@@ -48,12 +49,12 @@ const ProductList = () => {
           <ul className="app__navbar-links">
             <li className="app__flex p-text">
               <div />
-              <a href={`/addproduct`}>Add</a>
+              <button onClick={()=>{navigate('/addproduct')}}>ADD</button>
             </li>
             <li className="app__flex p-text">
               <div />
               <button onClick={deleteSelectedProducts} disabled={!selectedProductIndexes.length}>
-                Mass Delete
+                MASS DELETE
               </button>
             </li>
           </ul>
@@ -87,14 +88,14 @@ const ProductList = () => {
         </nav>
         <div className="list__container">
           <div className="list__box">
-            {products.length > 0 ? products.map((val) => (
+            {products?.length > 0 ? products?.map((val) => (   
               <div className="card" key={val.sku}>
                 <input
                   type="checkbox"
                   className="delete-checkbox"
                   onChange={(e) => {
                     setCheck(e.target.checked);
-                    acceptIndex(val.sku);
+                    acceptIndex(val.sku); 
                   }}
                   checked={selectedProductIndexes.includes(val.sku)}
                 />

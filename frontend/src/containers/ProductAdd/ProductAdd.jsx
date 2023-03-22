@@ -22,7 +22,7 @@ const ProductAdd = () => {
       }
     });
   }
-
+const url ='https://scandiwebackend.000webhostapp.com/Backend'
   const formik = useFormik({
     initialValues: {
       sku: "",
@@ -38,7 +38,7 @@ const ProductAdd = () => {
     onSubmit: (values) => {
       axios
         .post(
-          "http://localhost/php/Scandiweb/backend/createProduct.php",
+          `${url}/createProduct.php`,
           values
         )
         .then((data) => {
@@ -113,7 +113,7 @@ const ProductAdd = () => {
   });
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} id="product_form">
         <nav className="app__navbar">
           <div className="app__navbar-logo">
             <p>Product Add</p>

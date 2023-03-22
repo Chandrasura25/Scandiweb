@@ -1,28 +1,33 @@
 <?php
 header("Access-Control-Allow-Origin:*");
+header("Access-Control-Allow-Headers:access");
+header("Access-Control-Allow-Methods:GET,POST,OPTIONS,PUT,DELETE");
 header("Access-Control-Allow-Headers:Content-Disposition,Content-Type,Content-Length,Accept-Encoding,Authorization,X-Requested-With");
+header("Content-type:application/json;charset-UFT-8");
+
+
+require "ConfigAbstract.php";
 class Config
 {
     protected $localhost = 'localhost';
-    protected $username = 'root';
-    protected $dbName = 'scandiweb';
-    protected $password = '';
-    protected $IFlocalhost = 'sql310.epizy.com';
-    protected $IFusername = 'epiz_33076293';
-    protected $IFdbName = 'epiz_33076293_hospital';
-    protected $IFpassword = 'gfz2ON1Om0';
+    // protected $username = 'root';
+    // protected $dbName = 'scandiweb';
+    // protected $password = '';
+    // protected $localhost = 'sql102.hyperphp.com';
+    protected $username = 'id20489970_localhost';
+    protected $dbName = 'id20489970_scandiweb_backend';
+    protected $password = 'w6Wwa&<c=yC{-Xh-';
     public $connectdb = "";
     public $res = [];
     public function __construct()
-{
-    $this->connectdb = new mysqli($this->localhost, $this->username, $this->password, $this->dbName);
-    
-    if ($this->connectdb->connect_error) {
-        die("Unable to connect" . $this->connectdb->connect_error);
-    } else {
-        $table_name = "Products";
+    {
+        $config = new DatabaseConfig($this->localhost, $this->username,$this->password, $this->dbName);
+        $connectionObject = new DatabaseConnection($config);
+        $this->connectdb = $connectionObject->getConnection();
 
-        $query = "CREATE TABLE IF NOT EXISTS $table_name (
+            $table_name = "Products";
+
+            $query = "CREATE TABLE IF NOT EXISTS $table_name (
             ProductID int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             sku VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(255) NOT NULL,
@@ -35,39 +40,35 @@ class Config
             length int(20)
         )";
 
-        $statement = $this->connectdb->query($query);
+            $statement = $this->connectdb->query($query);
 
-        if ($statement) {
-            // echo "Table created";
-        } else {
-            echo "Table already exists";
-        }
+            if (!$statement) {
+                echo "Error creating table: " . $this->connectdb->error;
+            }
+        
     }
-}
-
 
     public function create($query, $binder)
-{
-    $statement = $this->connectdb->prepare($query);
-    $statement->bind_param(...$binder);
+    {
+        $statement = $this->connectdb->prepare($query);
+        $statement->bind_param(...$binder);
 
-    // Clear any remaining result sets
-    while($this->connectdb->next_result()) {
-        if($this->connectdb->store_result()) {
-            $this->connectdb->use_result();
+        // Clear any remaining result sets
+        while ($this->connectdb->next_result()) {
+            if ($this->connectdb->store_result()) {
+                $this->connectdb->use_result();
+            }
         }
-    }
 
-    if ($statement->execute()) {
-        $this->res['success'] = true;
-        $this->res['message'] = "Product created successfully";
-    } else {
-        $this->res['success'] = false;
-        $this->res['message'] = "Product can not be created successfully";
+        if ($statement->execute()) {
+            $this->res['success'] = true;
+            $this->res['message'] = "Product created successfully";
+        } else {
+            $this->res['success'] = false;
+            $this->res['message'] = "Product can not be created successfully";
+        }
+        return $this->res;
     }
-    return $this->res;
-}
-
 
     public function read($query, $binder)
     {
@@ -87,7 +88,8 @@ class Config
         return $this->res;
     }
 
-    public function delete($query, $binder){
+    public function delete($query, $binder)
+    {
         $statement = $this->connectdb->prepare($query);
         if ($binder) {
             $statement->bind_param(...$binder);
@@ -106,6 +108,5 @@ class Config
         }
         return $this->res;
     }
-    
 
 }

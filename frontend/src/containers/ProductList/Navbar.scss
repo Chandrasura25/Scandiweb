@@ -33,7 +33,15 @@
     margin: 0 1rem;
     cursor: pointer;
     flex-direction: column;
-
+    &:nth-child(1) button{
+      width:100px;
+      background:var(--brown-color);
+      &:hover{
+      border: 1px solid var(--brown-color);
+      background: none;
+      color: var(--brown-color);
+      }
+    }
     div {
       width: 5px;
       height: 5px;
@@ -49,26 +57,6 @@
         border: 1px solid red;
         background: none;
         color: red;
-      }
-    }
-    a{
-      background: var(--brown-color);
-      border: none;
-      outline: none;
-      width: 100px;
-      padding: 10px 15px;
-      text-align: center;
-      border-radius: 18px;
-      color: var(--white-color);
-      text-transform: uppercase;
-      font-weight: 500;
-      transition: all 0.3s ease-in-out;
-      cursor: pointer;
-      text-decoration: none;
-      &:hover {
-        color: var(--brown-color);
-        background: none;
-        border:1px solid var(--brown-color) ;
       }
     }
     &:hover {

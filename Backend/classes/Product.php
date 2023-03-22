@@ -1,4 +1,10 @@
 <?php
+header("Access-Control-Allow-Origin:*");
+header("Access-Control-Allow-Headers:access");
+header("Access-Control-Allow-Methods:GET,POST,OPTIONS,PUT,DELETE");
+header("Access-Control-Allow-Headers:Content-Disposition,Content-Type,Content-Length,Accept-Encoding,Authorization,X-Requested-With");
+header("Content-type:application/json;charset-UFT-8");
+
 require "ProductAbstract.php";
 class Product extends ProductAbstract
 {
@@ -82,7 +88,7 @@ class Product extends ProductAbstract
     public function getProductData()
     {
         // Prepare the query
-        $query = "SELECT * FROM products ORDER By ProductID DESC";
+        $query = "SELECT * FROM Products ORDER By ProductID DESC";
         $binder = null;
 
         // $product = new self();
