@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import "./ProductList.scss";
 import "./Navbar.scss";
 import { HiMenuAlt4, HiX } from "react-icons/hi";
-import axios from "axios";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 const ProductList = () => {
   const [toggle, setToggle] = useState(false);
   const [check, setCheck] = useState(false);
   const [selectedProductIndexes, setSelectedProductIndexes] = useState([]);
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate()
-  const url ='https://scandiwebackend.000webhostapp.com/Backend'
+  const navigate = useNavigate();
+  const url = "https://scandiwebackend.000webhostapp.com/Backend"; 
+  // const url ='http://localhost/php/scandiweb/Backend' 
   useEffect(() => {
-    axios
-      .get(`${url}/getAllProducts.php`) 
+    axios.get(`${url}/getAllProducts.php`)
       .then((data) => setProducts(data.data.result))
       .catch((err) => console.log(err));
   }, []);
@@ -22,18 +22,26 @@ const ProductList = () => {
     if (check) {
       setSelectedProductIndexes((prevState) => [...prevState, sku]);
     } else {
-      setSelectedProductIndexes((prevState) => prevState.filter((selectedSku) => selectedSku !== sku));
+      setSelectedProductIndexes((prevState) =>
+        prevState.filter((selectedSku) => selectedSku !== sku)
+      );
     }
   };
   const deleteSelectedProducts = () => {
     if (selectedProductIndexes.length > 0) {
-      axios
-        .post(`${url}/deleteProduct.php`, {
-          sku: selectedProductIndexes,
-        })
+      axios.post(`${url}/deleteProduct.php`, { sku: selectedProductIndexes }
+    )
         .then((response) => {
-          setSelectedProductIndexes([]);
-          setProducts((prevState) => prevState.filter((product) => !selectedProductIndexes.includes(product.sku)));
+          if (response.ok) {
+            setSelectedProductIndexes([]);
+            setProducts((prevState) =>
+              prevState.filter(
+                (product) => !selectedProductIndexes.includes(product.sku)
+              )
+            );
+          } else {
+            throw new Error("Network response was not ok");
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -49,11 +57,20 @@ const ProductList = () => {
           <ul className="app__navbar-links">
             <li className="app__flex p-text">
               <div />
-              <button onClick={()=>{navigate('/addproduct')}}>ADD</button>
+              <button
+                onClick={() => {
+                  navigate("/addproduct");
+                }}
+              >
+                ADD
+              </button>
             </li>
             <li className="app__flex p-text">
               <div />
-              <button onClick={deleteSelectedProducts} disabled={!selectedProductIndexes.length}>
+              <button
+                onClick={deleteSelectedProducts}
+                disabled={!selectedProductIndexes.length}
+              >
                 MASS DELETE
               </button>
             </li>
@@ -74,10 +91,13 @@ const ProductList = () => {
                   </li>
                   <li className="app__flex p-text">
                     <div />
-                    <button onClick={() => {
-                      deleteSelectedProducts();
-                      setToggle(false);
-                    }} disabled={!selectedProductIndexes.length}>
+                    <button
+                      onClick={() => {
+                        deleteSelectedProducts();
+                        setToggle(false);
+                      }}
+                      disabled={!selectedProductIndexes.length}
+                    >
                       Mass Delete
                     </button>
                   </li>
@@ -88,21 +108,22 @@ const ProductList = () => {
         </nav>
         <div className="list__container">
           <div className="list__box">
-            {products?.length > 0 ? products?.map((val) => (   
-              <div className="card" key={val.sku}>
-                <input
-                  type="checkbox"
-                  className="delete-checkbox"
-                  onChange={(e) => {
-                    setCheck(e.target.checked);
-                    acceptIndex(val.sku); 
-                  }}
-                  checked={selectedProductIndexes.includes(val.sku)}
-                />
-                <ul>
-                  <li>{val.sku}</li>
-                  <li>{val.name}</li>
-                  <li>{val.price}.00 $</li>
+            {products?.length > 0
+              ? products?.map((val) => (
+                  <div className="card" key={val.sku}>
+                    <input
+                      type="checkbox"
+                      className="delete-checkbox"
+                      onChange={(e) => {
+                        setCheck(e.target.checked);
+                        acceptIndex(val.sku);
+                      }}
+                      checked={selectedProductIndexes.includes(val.sku)}
+                    />
+                    <ul>
+                      <li>{val.sku}</li>
+                      <li>{val.name}</li>
+                      <li>{val.price}.00 $</li>
                       {(() => {
                         if (val.productType === "Furniture") {
                           return (

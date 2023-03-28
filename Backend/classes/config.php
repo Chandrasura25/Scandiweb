@@ -1,22 +1,20 @@
 <?php
-header("Access-Control-Allow-Origin:*");
-header("Access-Control-Allow-Headers:access");
-header("Access-Control-Allow-Methods:GET,POST,OPTIONS,PUT,DELETE");
-header("Access-Control-Allow-Headers:Content-Disposition,Content-Type,Content-Length,Accept-Encoding,Authorization,X-Requested-With");
-header("Content-type:application/json;charset-UFT-8");
+header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Access-Control-Allow-Headers: Content-Disposition, Content-Type, Content-Length, Accept-Encoding, Authorization, X-Requested-With");
+header("Content-type: application/json; charset=UTF-8");
 
 
 require "ConfigAbstract.php";
 class Config
 {
-    protected $localhost = 'localhost';
-    // protected $username = 'root';
+    protected $localhost = 'database.c58jhy6fqzkc.us-east-1.rds.amazonaws.com';
+    // protected $username = 'root'; 
     // protected $dbName = 'scandiweb';
     // protected $password = '';
-    // protected $localhost = 'sql102.hyperphp.com';
-    protected $username = 'id20489970_localhost';
-    protected $dbName = 'id20489970_scandiweb_backend';
-    protected $password = 'w6Wwa&<c=yC{-Xh-';
+    protected $username = 'admin';
+    protected $dbName = 'database';
+    protected $password = 'Demilade'; 
     public $connectdb = "";
     public $res = [];
     public function __construct()
@@ -48,28 +46,41 @@ class Config
         
     }
 
-    public function create($query, $binder)
-    {
-        $statement = $this->connectdb->prepare($query);
-        $statement->bind_param(...$binder);
+    //  public function create($query, $binder)
+    //  {
+    //      $statement = $this->connectdb->prepare($query);
+    //      $statement->bind_param(...$binder);
 
-        // Clear any remaining result sets
-        while ($this->connectdb->next_result()) {
-            if ($this->connectdb->store_result()) {
-                $this->connectdb->use_result();
-            }
+    //     // Clear any remaining result sets
+    //     while ($this->connectdb->next_result()) {
+    //         if ($this->connectdb->store_result()) {
+    //             $this->connectdb->use_result();
+    //         }
+    //     }
+
+    //     if ($statement->execute()) {
+    //         $this->res['success'] = true;
+    //         $this->res['message'] = "Product created successfully";
+    //     } else {
+    //         $this->res['success'] = false;
+    //         $this->res['message'] = "Product can not be created successfully";
+    //     }
+    //     return $this->res;
+    // }
+
+    public function create($query,$binder){
+        $statement = $this ->connectdb->prepare($query);
+         $statement->bind_param(...$binder);
+        if($statement->execute()){
+          $this->res['success']= true;
+          $this->res['message'] = "Product created successfully";
         }
-
-        if ($statement->execute()) {
-            $this->res['success'] = true;
-            $this->res['message'] = "Product created successfully";
-        } else {
-            $this->res['success'] = false;
-            $this->res['message'] = "Product can not be created successfully";
-        }
-        return $this->res;
-    }
-
+        else{
+          $this ->res['success'] = false;
+          $this->res['message'] = "Product can not be created successfully";
+      }
+       return $this->res;
+      }
     public function read($query, $binder)
     {
         $statement = $this->connectdb->prepare($query);

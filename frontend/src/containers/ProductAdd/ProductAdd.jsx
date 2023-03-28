@@ -22,7 +22,7 @@ const ProductAdd = () => {
       }
     });
   }
-const url ='https://scandiwebackend.000webhostapp.com/Backend'
+  const url ='https://scandiwebackend.000webhostapp.com/Backend/createProduct.php';
   const formik = useFormik({
     initialValues: {
       sku: "",
@@ -36,11 +36,8 @@ const url ='https://scandiwebackend.000webhostapp.com/Backend'
       height: "",
     },
     onSubmit: (values) => {
-      axios
-        .post(
-          `${url}/createProduct.php`,
-          values
-        )
+      console.log(values)
+      axios.post(url, values)
         .then((data) => {
           if (data.data.success === true) {
             navigate("/");
@@ -49,6 +46,7 @@ const url ='https://scandiwebackend.000webhostapp.com/Backend'
         .catch((err) => {
           console.log(err);
         });
+      
     },
     validate: (values) => {
       let errors = {};
@@ -123,7 +121,9 @@ const url ='https://scandiwebackend.000webhostapp.com/Backend'
               <button type="submit">Save</button>
             </li>
             <li className="app__flex p-text">
-              <button onClick={()=>navigate('/')} type="button">Cancel</button>
+              <button onClick={() => navigate("/")} type="button">
+                Cancel
+              </button>
             </li>
           </ul>
         </nav>
