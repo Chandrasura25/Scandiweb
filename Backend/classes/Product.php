@@ -96,3 +96,4 @@ class Product extends ProductAbstract
     }
 
 }
+?>
