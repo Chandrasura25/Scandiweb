@@ -10,10 +10,10 @@ const ProductList = () => {
   const [selectedProductIndexes, setSelectedProductIndexes] = useState([]);
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const url = "https://scandiwebackend.000webhostapp.com/Backend"; 
+  const url = "https://scandback.herokuapp.com"; 
   // const url ='http://localhost/php/scandiweb/Backend' 
   useEffect(() => {
-    axios.get(`${url}/getAllProducts.php`)
+    axios.get(`${url}`)
       .then((data) => setProducts(data.data.result))
       .catch((err) => console.log(err));
   }, []);
@@ -32,14 +32,15 @@ const ProductList = () => {
       axios.post(`${url}/deleteProduct.php`, { sku: selectedProductIndexes }
     )
         .then((response) => {
-          if (response.ok) {
+          if (response.data.success === true) {
             setSelectedProductIndexes([]);
             setProducts((prevState) =>
               prevState.filter(
                 (product) => !selectedProductIndexes.includes(product.sku)
               )
             );
-          } else {
+          }
+        else {
             throw new Error("Network response was not ok");
           }
         })
