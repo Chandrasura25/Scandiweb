@@ -6,15 +6,13 @@ header("Content-type: application/json; charset=UTF-8");
 
 
 require "ConfigAbstract.php";
+// mysql://b2aa7ed824b54e:61572917@us-cdbr-east-06.cleardb.net/heroku_fb53b11f8671d7c?reconnect=true
 class Config
 {
-    protected $localhost = 'database.c58jhy6fqzkc.us-east-1.rds.amazonaws.com';
-    // protected $username = 'root'; 
-    // protected $dbName = 'scandiweb';
-    // protected $password = '';
-    protected $username = 'admin';
-    protected $dbName = 'database';
-    protected $password = 'Demilade'; 
+    protected $localhost = 'us-cdbr-east-06.cleardb.net';
+    protected $username = 'b2aa7ed824b54e';
+    protected $dbName = 'heroku_fb53b11f8671d7c';
+    protected $password = '61572917'; 
     public $connectdb = "";
     public $res = [];
     public function __construct()
@@ -45,28 +43,6 @@ class Config
             }
         
     }
-
-    //  public function create($query, $binder)
-    //  {
-    //      $statement = $this->connectdb->prepare($query);
-    //      $statement->bind_param(...$binder);
-
-    //     // Clear any remaining result sets
-    //     while ($this->connectdb->next_result()) {
-    //         if ($this->connectdb->store_result()) {
-    //             $this->connectdb->use_result();
-    //         }
-    //     }
-
-    //     if ($statement->execute()) {
-    //         $this->res['success'] = true;
-    //         $this->res['message'] = "Product created successfully";
-    //     } else {
-    //         $this->res['success'] = false;
-    //         $this->res['message'] = "Product can not be created successfully";
-    //     }
-    //     return $this->res;
-    // }
 
     public function create($query,$binder){
         $statement = $this ->connectdb->prepare($query);
