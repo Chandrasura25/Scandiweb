@@ -6,7 +6,6 @@ header("Content-type: application/json; charset=UTF-8");
 
 
 require "ConfigAbstract.php";
-// mysql://b2aa7ed824b54e:61572917@us-cdbr-east-06.cleardb.net/heroku_fb53b11f8671d7c?reconnect=true
 class Config
 {
     protected $localhost = 'us-cdbr-east-06.cleardb.net';
